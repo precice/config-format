@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=41", "wheel", "setuptools-git-versioning"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="precice-config-format"
+dynamic = [ "version" ]
+dependencies = [
+    "lxml"
+]
+requires-python = ">=3.8"
+authors = [
+    { name = "The preCICE Developers",  email="info@precice.org"}
+]
+maintainers = [
+    { name = "Frédéric Simonis",  email="frederic.simonis@ipvs.uni-stuttgart.de"}
+]
+description="A tool for consistently formatting a preCICE configuration file."
+readme = "README.md"
+license= "GPL-3.0-or-later"
+license-files = [ "LICENSE" ]
+keywords = [ "preCICE", "XML",  "configuration", "format", "formatter" ]
+classifiers=[
+"Development Status :: 4 - Beta",
+"Programming Language :: Python :: 3 :: Only",
+"Programming Language :: Python :: 3.8",
+"Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://precice.org"
+Repository = "https://github.com/precice/config-format.git"
+"Bug Tracker" = "https://github.com/precice/config-format/issues"
+
+[project.scripts]
+precice-config-format = "preciceconfigformat.cli:main"
+
+[tool.setuptools]
+packages=["preciceconfigformat"]
+
+[tool.setuptools-git-versioning]
+enabled = true
+
+[tool.mypy]
+disable_error_code = "import-untyped"
