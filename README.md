@@ -6,16 +6,37 @@
 
 Install directly from PyPi using [pipx](https://pipx.pypa.io/stable/) or via pip:
 
-```
+```console
 pipx install precice-config-format
 ```
 
 ## Usage
 
-To format a given preCICE configuration file in-place:
+To format one or more preCICE configuration files in-place:
 
-```
-precice-config-format <CONFIG-FILE>
+```console
+precice-config-format FILE ...
 ```
 
-Consider using the [preCICE pre-commit hooks](https://github.com/precice/precice-pre-commit-hooks) to simplify using this tool.
+The script returns with exit code 0 on success, 1 on error, and 2 if a file was modified.
+
+## pre-commit hook
+
+To use this script as a pre-commit hook select [a tag](https://github.com/precice/config-format/tags) and add:
+
+```yaml
+-   repo: https://github.com/precice/config-format
+    rev: ''  # Use the tag you want to use
+    hooks:
+    -   id: precice-config-format
+```
+
+To exclude directories, use `exclude:`
+
+```yaml
+-   repo: https://github.com/precice/config-format
+    rev: ''  # Use the tag you want to use
+    hooks:
+    -   id: precice-config-format
+        exclude: '^thridparty' # optionally exclude directories here
+```
