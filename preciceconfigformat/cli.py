@@ -142,7 +142,10 @@ class PrettyPrinter:
 
 
 def makeFormatParser(add_help: bool = True):
-    parser = argparse.ArgumentParser(add_help=add_help)
+    parser = argparse.ArgumentParser(
+        add_help=add_help,
+        description="Consistently format preCICE configuration files.",
+    )
     parser.add_argument(
         "files", nargs="+", type=str, help="The XML configuration files."
     )
