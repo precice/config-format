@@ -141,11 +141,16 @@ class PrettyPrinter:
                 self.print()
 
 
-def parse_args():
-    parser = argparse.ArgumentParser()
+def makeFormatParser(add_help: bool = True):
+    parser = argparse.ArgumentParser(add_help=add_help)
     parser.add_argument(
         "files", nargs="+", type=str, help="The XML configuration files."
     )
+    return parser
+
+
+def parse_args():
+    parser = makeFormatParser()
     return parser.parse_args()
 
 
@@ -158,41 +163,47 @@ def example():
     return parseXML(open("./BB-sockets-explicit-twoway.xml", "r").read())
 
 
-def main():
-    args = parse_args()
+def formatFile(filename):
+    content = None
+    try:
+        with open(filename, "rb") as xml_file:
+            content = xml_file.read()
+    except Exception as e:
+        print(f'Unable to open file: "{filename}"')
+        print(e)
+        return 1
 
+    xml = None
+    try:
+        xml = parseXML(content)
+    except Exception as e:
+        print(f'Error occurred while parsing file: "{filename}"')
+        print(e)
+        return 1
+
+    buffer = io.StringIO()
+    printer = PrettyPrinter(stream=buffer)
+    printer.printRoot(xml)
+
+    if buffer.getvalue() != content.decode("utf-8"):
+        print(f'Reformatting file: "{filename}"')
+        with open(filename, "w") as xml_file:
+            buffer.seek(0)
+            shutil.copyfileobj(buffer, xml_file)
+        return 2
+    return 0
+
+
+def formatFiles(files):
     modified = False
     failed = False
-    for filename in args.files:
-        content = None
-        try:
-            with open(filename, "rb") as xml_file:
-                content = xml_file.read()
-        except Exception as e:
-            print(f'Unable to open file: "{filename}"')
-            print(e)
+
+    for filename in files:
+        ret = formatFile(filename)
+        if ret == 1:
             failed = True
-            continue
-
-        xml = None
-        try:
-            xml = parseXML(content)
-        except Exception as e:
-            print(f'Error occurred while parsing file: "{filename}"')
-            print(e)
-            failed = True
-            continue
-
-        buffer = io.StringIO()
-        printer = PrettyPrinter(stream=buffer)
-        printer.printRoot(xml)
-
-        if buffer.getvalue() != content.decode("utf-8"):
-            print(f'Reformatting file: "{filename}"')
+        elif ret == 2:
             modified = True
-            with open(filename, "w") as xml_file:
-                buffer.seek(0)
-                shutil.copyfileobj(buffer, xml_file)
 
     if failed:
         return 1
@@ -201,6 +212,15 @@ def main():
         return 2
 
     return 0
+
+
+def runFormat(ns):
+    return formatFiles(ns.files)
+
+
+def main():
+    args = parse_args()
+    return runFormat(args)
 
 
 if __name__ == "__main__":
