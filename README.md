@@ -40,3 +40,8 @@ To exclude directories, use `exclude:`
     -   id: precice-config-format
         exclude: '^thridparty' # optionally exclude directories here
 ```
+
+## Licensing
+
+This repository contains a modified version of `format_precice_config.py`, which was part of the repository [precice/precice-pre-commit-hooks](https://github.com/precice/precice-pre-commit-hooks/blob/v3.3/format_precice_config/format_precice_config.py).
+The copyright holder Frédéric Simonis (@fsimonis frederic.simonis@ipvs.uni-stuttgart.de) decided on 23. June 2025 16:30 CET to rerelease the content of the file `format_precice_config.py` in this repository under the MIT license.

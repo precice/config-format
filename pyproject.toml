@@ -17,7 +17,7 @@ maintainers = [
 ]
 description="A tool for consistently formatting a preCICE configuration file."
 readme = "README.md"
-license= "GPL-3.0-or-later"
+license= "MIT"
 license-files = [ "LICENSE" ]
 keywords = [ "preCICE", "XML",  "configuration", "format", "formatter" ]
 classifiers=[
